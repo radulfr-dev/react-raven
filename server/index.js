@@ -25,9 +25,15 @@ app.listen(PORT, () => {
 })
 
 app.group("/api/v1", (router) => {
-    router.get('/test', Auth.authenticateCall, (req, res) => {
+    router.use(Auth.authenticateCall)
+    router.get('/test', (req, res) => {
         res.status(200).json({
             "message": "Test"
+        })
+    })
+    router.get('/secondTest', (req, res) => {
+        res.status(200).json({
+            "message": "Second Test"
         })
     })
 })
