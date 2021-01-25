@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express')
+require('express-group-routes')
 const app = express()
 const logger = require('morgan')
 const cors = require('cors')
@@ -12,6 +13,8 @@ app.listen(PORT, () => {
     console.log(`Listening on port: ${PORT}`)
 })
 
-app.get('/', (req, res) => {
-    res.end('Server root')
+app.group("/api/v1", (router) => {
+    router.get('/test', (req, res) => {
+        res.end('Test')
+    })
 })
