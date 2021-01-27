@@ -5,11 +5,15 @@ const app = express()
 const session = require('express-session')
 const logger = require('morgan')
 const cors = require('cors')
+const bodyParser = require('body-parser')
 const PORT = process.env.PORT
 
 import Auth from './middleware/auth'
+import AuthController from './controllers/AuthController'
 
 app.use(cors())
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
 app.use(logger('dev'))
 app.use(session({
     secret: process.env.APP_SECRET,
@@ -25,15 +29,8 @@ app.listen(PORT, () => {
 })
 
 app.group("/api/v1", (router) => {
-    router.use(Auth.authenticateCall)
-    router.get('/test', (req, res) => {
-        res.status(200).json({
-            "message": "Test"
-        })
-    })
-    router.get('/secondTest', (req, res) => {
-        res.status(200).json({
-            "message": "Second Test"
-        })
+    router.post('/login', (req, res) => {
+        AuthController.loginUser(req.body.username)
     })
 })
+
