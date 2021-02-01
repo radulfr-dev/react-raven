@@ -1,34 +1,35 @@
-const mysql = require('mysql')
+const mysql = require("mysql2");
 
 export default class DatabaseController {
-    constructor(){
-        this.connection = mysql.createConnection({
-            host: process.env.DB_HOST,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASS,
-            database: process.env.DB_NAME
-        })
-    }
+  constructor() {
+    this.connection = mysql.createConnection({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
+    });
+  }
 
-    async getUsersByUsername(username){
-        try {
-            this.connection.connect()
+  getUsersByUsername(username) {
+    this.connection.connect();
 
-            const response = await new Promise((resolve, reject) => {
-                const query = `SELECT * FROM users WHERE username = "${username}"`
+    const query = `SELECT * FROM users WHERE username = "${username}"`;
 
-                this.connection.query(query, (err, results) => {
-                    if(err) reject(new Error(err.message))
-                    resolve(results)
-                })
-            })
-            
-            this.connection.end()
+    this.connection.query(query, (err, results) => {
+      if (err) throw err;
+      this.connection.end();
+      return results;
+    });
+  }
 
-            return response
-        }catch(e){
-            this.connection.end()
-            return e
-        }
-    }
+  addUserToDatabase(userDataObject) {
+    this.connection.connect();
+
+    const query = `INSERT INTO users (username, password) VALUES (${userDataObject.username},${userDataObject.password})`;
+
+    this.connection.query(query, (err, results) => {
+      if (err) throw err;
+      console.log("1 record inserted");
+    });
+  }
 }

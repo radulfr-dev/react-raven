@@ -1,0 +1,21 @@
+.loginForm {
+    form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: black;
+
+        input {
+            color: black;
+        }
+
+        button {
+            background-color: orange;
+            color: black;
+            border-radius: 25px;
+            border: none;
+        }
+        
+    }
+}
