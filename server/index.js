@@ -26,11 +26,18 @@ app.use(session({
 
 app.listen(PORT, () => {
     console.log(`Listening on port: ${PORT}`)
-})
+});
+
+app.get('/', (req, res) => {
+    console.log(req);
+});
 
 app.group("/api/v1", (router) => {
     router.post('/login', (req, res) => {
         AuthController.loginUser(req.body.username)
+    })
+    router.post('/register', (req, res) => {
+        AuthController.registerUser(req.body.username)
     })
 })
 

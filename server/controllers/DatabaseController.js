@@ -1,4 +1,4 @@
-const mysql = require("mysql2");
+const mysql = require("mysql");
 
 export default class DatabaseController {
   constructor() {
@@ -25,7 +25,9 @@ export default class DatabaseController {
   addUserToDatabase(userDataObject) {
     this.connection.connect();
 
-    const query = `INSERT INTO users (username, password) VALUES (${userDataObject.username},${userDataObject.password})`;
+    const thisTimestamp = Math.floor(new Date().getTime() / 1000);
+
+    const query = `INSERT INTO users (username, password, last_logged_in, role) VALUES (${userDataObject.username},${userDataObject.hashed},${thisTimestamp},0)`;
 
     this.connection.query(query, (err, results) => {
       if (err) throw err;
